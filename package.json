@@ -2,7 +2,7 @@
   "name": "groundup-be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "nodemon index.js",
   "engines": {
     "node": "14.20.0",
     "npm": "6.14.17"

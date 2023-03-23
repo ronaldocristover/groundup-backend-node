@@ -5,6 +5,7 @@ const router = express.Router();
 router.get('/alert', async (req, res) => {
     try {
         const { machine } = req.query;
+        console.log(machine)
         let payload = {}
         if (typeof machine !== 'undefined' && machine !== '') payload.machine = machine
         const data = await AlertModel.find(payload);
@@ -16,15 +17,28 @@ router.get('/alert', async (req, res) => {
 })
 
 router.post('/alert', async (req, res) => {
-    const { id, name, description, type, machine } = req.body
+    const payload = req.body
 
+    const generateRandomNumber = (length) => {
+        let result = '';
+        const characters = '0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+        return result;
+    }
     const data = new AlertModel({
-        id: id,
-        name: name,
-        description: description,
-        type: type,
-        machine: machine,
-        is_read: false
+        alertNumber: generateRandomNumber(16),
+        timestamp: payload.timestamp,
+        machine: payload.machine,
+        anomaly: payload.anomaly,
+        sensor: payload.sensor,
+        soundClip: payload.soundClip,
+        suspectedReason: payload.suspectedReason || '',
+        isRead: false
     });
 
     try {
@@ -46,14 +60,27 @@ router.get('/alert/:id', async (req, res) => {
     }
 })
 
-//Update by ID Method
-router.get('/alert/markAsRead/:id', async (req, res) => {
+router.get('/getMachineList', async (req, res) => {
+    try {
+        const data = await AlertModel.find().distinct('machine')
+        res.json(data)
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
+router.put('/alert/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        const payload = req.body;
 
-        const result = await Model.findByIdAndUpdate(
+        const result = await AlertModel.findByIdAndUpdate(
             id, {
-            is_read: true
+            suspectedReason: payload.suspectedReason,
+            actionRequired: payload.actionRequired,
+            comment: payload.comment,
+            isRead: true
         })
         res.send(result)
     }

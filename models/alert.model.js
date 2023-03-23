@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
 const AlertScheme = new mongoose.Schema({
-    id: {
+    alertNumber: {
         required: true,
         type: String
     },
-    name: {
-        required: true,
-        type: String
-    },
-    description: {
+    timestamp: {
         required: true,
         type: String
     },
@@ -16,15 +12,35 @@ const AlertScheme = new mongoose.Schema({
         required: true,
         type: String
     },
-    is_read: {
+    anomaly: {
+        required: true,
+        type: String
+    },
+    sensor: {
+        required: true,
+        type: String,
+    },
+    soundClip: {
+        required: true,
+        type: String
+    },
+    suspectedReason: {
+        type: String,
+        default: "Unknown Anomaly"
+    },
+    actionRequired: {
+        type: String,
+        default: null,
+    },
+    isRead: {
         required: true,
         type: Boolean,
         default: false
     },
-    type: {
-        required: true,
-        type: String
-    },
+    comment: {
+        type: String,
+        default: null
+    }
 })
 
 module.exports = mongoose.model('alert', AlertScheme)
