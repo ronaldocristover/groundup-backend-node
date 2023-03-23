@@ -5,7 +5,6 @@ const router = express.Router();
 router.get('/alert', async (req, res) => {
     try {
         const { machine } = req.query;
-        console.log(machine)
         let payload = {}
         if (typeof machine !== 'undefined' && machine !== '') payload.machine = machine
         const data = await AlertModel.find(payload);
