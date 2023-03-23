@@ -15,7 +15,13 @@ params:
 DATABASE_URL= <<your mongo database url >>
 PORT= <<your opened port>>
 ```
+
+2. Install Depedencies
 ```
-1. npm install
-2. npm start
+npm install
+```
+
+3. Start Server
+```
+npm start
 ```
